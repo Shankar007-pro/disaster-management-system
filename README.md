@@ -1,99 +1,142 @@
-# Disaster Management System
-Disaster Management System
-Overview
-This project is a Generative AI-powered disaster management platform designed to collect, analyze, and visualize real-time and simulated disaster data for effective emergency response. It integrates spatial databases, AI text analysis, predictive modeling, and web-based geospatial dashboards to support rescue coordination and communication.
+Disaster Management System — Detailed README
+Project Overview
+The Disaster Management System is a comprehensive, Generative AI-powered platform designed for real-time disaster monitoring, response coordination, and post-disaster recovery assistance. This system integrates geospatial data management, AI-based text analysis, predictive analytics, and interactive web mapping to empower governments, NGOs, and citizens in disaster scenarios.
 
-Features
-Real-time data ingestion: Weather, citizen reports, and resource information ingestion and storage using PostgreSQL with PostGIS.
+Key Features
+Real-Time Data Ingestion:
+Collects live weather reports, citizen-generated alerts, and rescue resource data into a spatially enabled PostgreSQL database (PostGIS).
 
-AI Text Analysis: Uses OpenAI GPT-4 for extracting severity, location, urgency, and assistance requests from citizen disaster reports.
+AI-Powered Text Analysis:
+Uses OpenAI GPT-4 models to automatically analyze citizen reports, extracting severity levels, precise locations, urgency, and types of requests, supporting multilingual inputs.
 
-Predictive Modeling: Machine learning models (RandomForest) predict disaster impact severity and zones.
+Predictive Modeling:
+Employs machine learning models to forecast impact severity and generate risk zones using historical and real-time data.
 
-Interactive Maps: React.js frontend with Leaflet displays evacuation zones and impact areas using GeoJSON data.
+Interactive Dashboard:
+React.js frontend with React-Leaflet for interactive evacuation and disaster impact maps, supporting real-time updates and offline caching for resilience.
 
-Offline Support: Data caching and synchronization enable functionality during network outages.
+Multilingual Support & Alerts:
+Provides alerts and UI translations leveraging JSON-based language files and dynamic AI-generated messages to serve diverse linguistic populations.
 
-Multilingual Alerts: Supports multiple languages with translation JSONs and AI-generated multilingual messages.
+Offline Operation & Sync:
+Maintains local caches of critical data to function during network outages and syncs automatically once connectivity is restored.
 
-Notifications: Multi-channel alerting including SMS, web notifications, and voice alerts.
+Role-Based Access Control (RBAC):
+Implements secure JWT authentication with roles for Admins (policy makers/NGOs), Rescuers, and Citizens to ensure data and operation integrity.
 
-Role-based Access: Secure JWT authentication with Admin, Rescuer, and Citizen roles.
+Multi-Channel Notifications:
+Supports emergency SMS, web push, and voice alerts, with queued delivery during outages, to maximize communication reach.
 
-Containerized Deployment: Docker setup for consistent backend and frontend environments.
+Containerized Deployment:
+Uses Docker to package and deploy backend and frontend applications consistently across various environments.
 
 Technology Stack
-Backend: Python, Flask, PostgreSQL, PostGIS, OpenAI API, scikit-learn
+Backend: Python, Flask REST API, OpenAI GPT-4 integration, scikit-learn machine learning, psycopg2 for PostgreSQL
 
-Frontend: React.js, React-Leaflet, Leaflet
+Database: PostgreSQL 15+ with PostGIS extension for geospatial support
 
-Database: PostgreSQL with PostGIS extension for geospatial data
+Frontend: React.js, React-Leaflet, Leaflet.js for spatial mapping
 
-Containerization: Docker
+Languages: Python 3.11+, JavaScript (ES6+), JSON for configurations and data
+
+Deployment: Docker containers for backend and frontend
+
+System Architecture
+Data Layer:
+Spatial disaster and citizen data stored in PostGIS-enabled PostgreSQL tables with geospatial indexing enabling efficient spatial queries.
+
+AI Layer:
+ChatGPT (GPT-4) processes citizen text reports to identify severity, location, urgency, types of needs and generates multi-language alerts.
+
+Prediction Layer:
+Historical and live datasets feed scikit-learn models forecasting disaster severity for proactive resource allocation.
+
+Backend API:
+Flask app exposes RESTful endpoints for frontend data consumption, AI report analysis, data ingestion, and synchronization.
+
+Frontend:
+User-friendly React dashboard displays maps, alerts, reports; provides forms for citizen inputs; supports multi-language selection and offline data caching.
+
+Notification System:
+Integrates multi-channel emergency communication including SMS modems, web push notifications, and recorded voice alerts.
 
 Getting Started
 Prerequisites
-Node.js and npm (for frontend)
+Install PostgreSQL 15+ with PostGIS enabled.
 
-Python 3.11+
+Install Python 3.11+ and Node.js (v18+ recommended).
 
-PostgreSQL 15+ with PostGIS extension
+Docker installed for containerized deployment.
 
-Docker (optional, for containerized deployment)
-
-Installation
-Clone the repository
+Installation Steps
+Clone the Repository
 
 bash
 git clone https://github.com/yourusername/disaster-management-system.git
 cd disaster-management-system
-Setup backend
+Backend Setup
 
 bash
 cd backend
 python -m venv venv
-source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+source venv/bin/activate       # Windows: .\venv\Scripts\activate
 pip install -r requirements.txt
-Setup PostgreSQL
+Database Setup
 
-Install PostgreSQL 15+ with PostGIS.
+Create PostgreSQL database:
 
-Create disaster_db and enable PostGIS extension.
+sql
+CREATE DATABASE disaster_db;
+\c disaster_db
+CREATE EXTENSION postgis;
+Run SQL schema scripts located in backend/database/schema.sql to create tables.
 
-Run SQL scripts in backend/database/schema.sql to create tables.
-
-Run backend server
+Run Backend Server
 
 bash
 python api/app.py
-Setup frontend
+Frontend Setup
 
 bash
 cd ../frontend
 npm install
 npm run dev
-Open app
+Open Application
 
-Frontend: http://localhost:5173/ (Vite dev server)
+React app accessible at http://localhost:5173
 
-Backend API: http://localhost:5000/
+Backend API at http://localhost:5000
 
-Docker Deployment (optional)
-From project root:
+Docker Deployment
+Run the following commands in project root for containerized deployment:
 
 bash
 docker build -f docker/backend.Dockerfile -t disaster-backend .
 docker build -f docker/frontend.Dockerfile -t disaster-frontend .
+
 docker run -p 5000:5000 disaster-backend
 docker run -p 3000:3000 disaster-frontend
-Project Structure
+Directory Structure
 text
 disaster-management-system/
-│
-├── backend/               # Backend flask app, AI, data ingestion, DB scripts
-├── frontend/              # React frontend app
-├── data/                  # Raw and processed data, language files, maps
-├── docker/                # Dockerfiles for backend and frontend containers
-├── docs/                  # User manuals, developer documentation
-├── tests/                 # Automated tests for backend and frontend
-└── README.md              # This file
+├── backend/
+│   ├── api/                   # Flask API endpoints
+│   ├── models/ai_text_analysis/ # AI text analysis scripts
+│   ├── data_processing/       # Data ingestion & preprocessing scripts
+│   ├── database/              # DB schema and connection scripts
+│   ├── offline_cache/         # Offline data caching handlers
+│   └── requirements.txt       # Backend Python dependencies
+├── frontend/
+│   ├── public/                # Static files & assets
+│   ├── src/                   # React source code & components
+│   ├── package.json           # Frontend npm dependencies
+│   └── README.md
+├── data/
+│   ├── raw/                   # Raw weather, reports JSON, CSVs
+│   ├── processed/             # Cleaned/preprocessed data
+│   ├── maps/                  # GeoJSON and shapefiles for maps
+│   └── lang_translation/      # JSON translation files
+├── docker/                    # Dockerfiles for backend/frontend
+├── docs/                      # User manuals and developer docs
+├── tests/                     # Backend/frontend unit and integration tests
+└── README.md                  # Project overview and instructions
